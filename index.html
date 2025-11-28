@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>00926 AI 雙引擎策略 (手機版股價實證)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .google-gradient {
+            background: linear-gradient(135deg, #4285F4 0%, #DB4437 50%, #F4B400 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nvidia-text {
+            color: #76B900;
+        }
+        .kgi-gradient {
+            background: linear-gradient(90deg, #005596 0%, #F37021 100%);
+        }
+        .card-bg {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+        }
+        .vs-circle {
+            background: #0f172a;
+            border: 4px solid #ffffff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+        #download-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: white;
+            color: #0f172a;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+            background: #f1f5f9;
+        }
+        
+        /* 手機版尺寸設定：720x1280 (9:16) */
+        #capture-area {
+            width: 720px;
+            height: 1280px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Container -->
+    <div id="capture-area" class="rounded-3xl shadow-2xl border border-slate-700 relative">
+        
+        <!-- Background Decor -->
+        <div class="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-blue-500 via-red-500 to-yellow-500 opacity-80 z-10"></div>
+        <div class="absolute top-0 right-0 w-1/2 h-3 bg-[#76B900] opacity-80 z-10"></div>
+
+        <!-- Header -->
+        <div class="text-center pt-10 pb-4 px-8 flex-shrink-0">
+            <h1 class="text-5xl font-black mb-2 leading-tight tracking-tight text-white">
+                AI 投資</br><span class="text-red-500">不做選擇題</span>
+            </h1>
+            <p class="text-slate-300 text-2xl font-bold mb-2">
+                算力之王 <span class="text-xl mx-2">VS.</span> 數據帝國
+            </p>
+            <p class="text-slate-400 text-lg font-medium">
+                <span class="text-white font-bold border-b border-white/30 pb-0.5">00926 凱基全球菁英 55</span> <br>同時鎖定供應端與應用端
+            </p>
+        </div>
+
+        <!-- Cards Section (Vertical Stack) -->
+        <div class="flex-grow flex flex-col px-6 gap-4 relative">
+            
+            <!-- Google Card -->
+            <div class="card-bg rounded-2xl p-5 relative group border-l-8 border-l-blue-500 flex flex-col justify-center flex-1">
+                <div class="flex justify-between items-center mb-2">
+                    <div>
+                        <h3 class="text-4xl font-black google-gradient pb-2">Google</h3>
+                        <p class="text-sm text-slate-400">Alphabet Inc.</p>
+                    </div>
+                    <div class="text-right bg-slate-800 px-4 py-2 rounded-lg border border-slate-600">
+                        <span class="block text-xs text-slate-400">00926 持股約</span>
+                        <span class="text-3xl font-bold text-blue-400">11.1%</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <span class="bg-blue-900/40 text-blue-200 text-lg font-bold px-3 py-1 rounded">AI 生態護城河</span>
+                </div>
+                <ul class="space-y-2 text-slate-300">
+                    <li class="flex items-start"><i class="fas fa-layer-group mt-1 mr-3 text-blue-500 text-m"></i><span class="text-m leading-snug"><strong class="text-white">垂直整合霸主：</strong><br>TPU 自研晶片到終端生態完整</span></li>
+                    <li class="flex items-start"><i class="fas fa-rocket mt-1 mr-3 text-green-500 text-m"></i><span class="text-m leading-snug"><strong class="text-white">催化劑：</strong><br>Gemini 商業化、TPU v6 降低依賴</span></li>
+                </ul>
+            </div>
+
+            <!-- VS Badge -->
+            <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-16 h-16 rounded-full vs-circle flex items-center justify-center bg-slate-900">
+                <span class="font-black italic text-2xl text-white">VS</span>
+            </div>
+
+            <!-- NVIDIA Card -->
+            <div class="card-bg rounded-2xl p-5 relative group border-r-8 border-r-[#76B900] flex flex-col justify-center flex-1 mb-3">
+                <div class="flex justify-between items-center mb-2">
+                    <div>
+                        <h3 class="text-4xl font-black nvidia-text pb-2">NVIDIA</h3>
+                        <p class="text-sm text-slate-400">NVIDIA Corp.</p>
+                    </div>
+                    <div class="text-right bg-slate-800 px-4 py-2 rounded-lg border border-slate-600">
+                        <span class="block text-xs text-slate-400">00926 持股約</span>
+                        <span class="text-3xl font-bold text-[#76B900]">13.7%</span>
+                    </div>
+                </div>
+                <div class="mb-3 text-left">
+                    <span class="bg-[#76B900]/20 text-[#76B900] text-lg font-bold px-3 py-1 rounded">AI 基礎建設軍火商</span>
+                </div>
+                <ul class="space-y-2 text-slate-300">
+                    <li class="flex items-start"><i class="fas fa-crown mt-1 mr-3 text-[#76B900] text-m"></i><span class="text-m leading-snug"><strong class="text-white">絕對壟斷地位：</strong><br>AI 訓練晶片市佔 >80%，定價權高</span></li>
+                    <li class="flex items-start"><i class="fas fa-bolt mt-1 mr-3 text-[#76B900] text-m"></i><span class="text-m leading-snug"><strong class="text-white">催化劑：</strong><br>Blackwell 出貨放量、主權 AI 需求</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bottom Section: Chart + CTA -->
+        <div class="bg-slate-800/80 border-t border-slate-700 px-6 py-6 flex-shrink-0 flex flex-col gap-4">
+            
+            <!-- Chart Container -->
+            <div class="bg-slate-900/50 rounded-2xl border border-slate-600 p-4 relative flex flex-col h-[280px]">
+                <div class="flex justify-between items-start mb-2 pl-1">
+                    <div>
+                        <h4 class="text-white font-bold text-lg flex items-center">
+                            <i class="fas fa-chart-line text-blue-400 mr-2"></i>
+                            近一月股價走勢：00926 展現平滑抗震優勢
+                    </div>
+                </div>
+                <!-- Legend -->
+                <div class="flex gap-4 text-xs mb-2 pl-1">
+                    <span class="flex items-center text-slate-300"><span class="w-3 h-3 bg-[#4285F4] rounded-full mr-1.5"></span>GOOGL</span>
+                    <span class="flex items-center text-slate-300"><span class="w-3 h-3 bg-[#76B900] rounded-full mr-1.5"></span>NVDA</span>
+                    <span class="flex items-center text-white font-bold"><span class="w-3 h-3 bg-white border border-slate-500 rounded-full mr-1.5"></span>00926</span>
+                </div>
+                <!-- Canvas -->
+                <div class="flex-grow relative w-full h-full">
+                    <canvas id="stockChart"></canvas>
+                </div>
+            </div>
+
+            <!-- CTA (已加入超連結) -->
+            <a href="https://www.kgifund.com.tw/Fund/Detail?fundID=J016" target="_blank" class="kgi-gradient rounded-2xl p-5 flex flex-col justify-center items-center shadow-lg text-center pb-3 hover:brightness-110 transition-all no-underline group cursor-pointer">
+                <h2 class="text-3xl font-black text-white mb-2 group-hover:scale-105 transition-transform">00926 凱基全球菁英 55 <i class="fas fa-external-link-alt text-sm ml-2 opacity-70"></i></h2>
+                <p class="text-white/90 text-lg font-bold mb-1">一次打包 AI 雙引擎，擁抱成長紅利</p>
+                <p class="text-[10px] text-white/60 mt-1">
+                    ※ 基金投資有賺有賠，申購前應詳閱公開說明書
+                </p>
+            </a>
+
+        </div>
+
+    </div>
+
+    <script>
+        // === 數據處理 ===
+        const rawData = [
+            { date: '10/27', googl: 159.3031, nvda: 139.3871, etf: 118.4461 },
+            { date: '10/28', googl: 158.2382, nvda: 146.3313, etf: 118.8972 },
+            { date: '10/29', googl: 162.4386, nvda: 150.7061, etf: 120.4511 },
+            { date: '10/30', googl: 166.5267, nvda: 147.6853, etf: 122.0551 },
+            { date: '10/31', googl: 166.3551, nvda: 147.3941, etf: 121.4536 },
+            { date: '11/03', googl: 167.8519, nvda: 150.5896, etf: 120.4511 },
+            { date: '11/04', googl: 164.1957, nvda: 144.6280, etf: 119.7494 },
+            { date: '11/05', googl: 168.2009, nvda: 142.0949, etf: 118.6466 },
+            { date: '11/06', googl: 168.4612, nvda: 136.9049, etf: 118.9975 },
+            { date: '11/07', googl: 164.9589, nvda: 136.9559, etf: 117.7945 },
+            { date: '11/10', googl: 171.6263, nvda: 144.8901, etf: 118.5464 },
+            { date: '11/11', googl: 172.3422, nvda: 140.6027, etf: 119.9499 },
+            { date: '11/12', googl: 169.6208, nvda: 141.0686, etf: 120.4010 },
+            { date: '11/13', googl: 164.8051, nvda: 136.0169, etf: 120.4511 },
+            { date: '11/14', googl: 163.5272, nvda: 138.4263, etf: 118.0451 },
+            { date: '11/17', googl: 168.6210, nvda: 135.8276, etf: 118.8972 },
+            { date: '11/18', googl: 168.1832, nvda: 132.0134, etf: 117.3935 },
+            { date: '11/19', googl: 173.2296, nvda: 135.7694, etf: 116.6416 },
+            { date: '11/20', googl: 171.2418, nvda: 131.4893, etf: 120.2506 },
+            { date: '11/21', googl: 177.2821, nvda: 130.2082, etf: 116.7920 },
+            { date: '11/24', googl: 188.4754, nvda: 132.8796, etf: 118.1454 },
+            { date: '11/25', googl: 191.3506, nvda: 129.4366, etf: 120.9524 },
+            { date: '11/26', googl: 189.2859, nvda: 131.2127, etf: 121.6040 },
+        ];
+
+        // 計算相對於第一天的漲跌幅 (%)
+        const baseValues = rawData[0];
+        const labels = rawData.map(d => d.date);
+        const dataGoogl = rawData.map(d => ((d.googl - baseValues.googl) / baseValues.googl * 100).toFixed(2));
+        const dataNvda = rawData.map(d => ((d.nvda - baseValues.nvda) / baseValues.nvda * 100).toFixed(2));
+        const dataEtf = rawData.map(d => ((d.etf - baseValues.etf) / baseValues.etf * 100).toFixed(2));
+
+        // === Chart.js 配置 ===
+        const ctx = document.getElementById('stockChart').getContext('2d');
+        const stockChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Google (GOOGL)',
+                        data: dataGoogl,
+                        borderColor: '#4285F4',
+                        backgroundColor: '#4285F4',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    },
+                    {
+                        label: 'NVIDIA (NVDA)',
+                        data: dataNvda,
+                        borderColor: '#76B900',
+                        backgroundColor: '#76B900',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    },
+                    {
+                        label: '00926',
+                        data: dataEtf,
+                        borderColor: '#FFFFFF',
+                        backgroundColor: '#FFFFFF',
+                        borderWidth: 4, // 手機版加粗
+                        tension: 0.3,
+                        pointRadius: 0, 
+                        pointHoverRadius: 5,
+                        shadowColor: 'rgba(255, 255, 255, 0.5)',
+                        shadowBlur: 10
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }, 
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        titleFont: { size: 14 },
+                        bodyFont: { size: 14 },
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + (context.parsed.y > 0 ? '+' : '') + context.parsed.y + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255, 255, 255, 0.1)', borderColor: 'transparent' },
+                        ticks: { color: '#94a3b8', maxTicksLimit: 5, maxRotation: 0, font: { size: 10 } }
+                    },
+                    y: {
+                        grid: { color: 'rgba(255, 255, 255, 0.1)', borderColor: 'transparent' },
+                        ticks: { 
+                            color: '#94a3b8',
+                            font: { size: 10 },
+                            callback: function(value) { return value + '%'; } 
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
